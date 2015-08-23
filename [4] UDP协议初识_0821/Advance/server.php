@@ -25,14 +25,16 @@ try
         throw new Exception(socket_last_error($socket));
     }
 
-    //接收消息
-    socket_recvfrom($socket, $buf, 1024, 0, $ip, $port);
-    echo $buf."<br/>";
+    while (true) {
+        //接收消息
+        socket_recvfrom($socket, $buf, 1024, 0, $ip, $port);
+        echo $buf;
 
-    //发送消息
-    $reply = 'world';
-    $len = strlen($reply);
-    socket_sendto($socket, $reply, $len, 0, $ip, $port);
+        //发送消息
+        $reply = 'world';
+        $len = strlen($reply);
+        socket_sendto($socket, $reply, $len, 0, $ip, $port);
+    }
 
 }catch (Exception $exception){
     echo $exception->getMessage();
