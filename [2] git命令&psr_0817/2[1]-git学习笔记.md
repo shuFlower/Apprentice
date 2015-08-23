@@ -71,7 +71,7 @@ git config --global  user.email "1510276107@qq.com"<br/>
 
 **使用过程中补充-体会**
 
-(1)提交失败：原因，一定要先更新，再提交
+(1)提交失败：原因，一定要先更新(git上与本地的文件有冲突)，再提交
 
 >     先：git pull origin master
 >     然后： git commit -a -m"all"
