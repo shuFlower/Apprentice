@@ -27,7 +27,7 @@ try
 
     //接收消息
     socket_recvfrom($socket, $buf, 1024, 0, $ip, $port);
-    echo $buf;
+    echo $buf."<br/>";
 
     //发送消息
     $reply = 'world';
