@@ -11,10 +11,14 @@ ipv6地址
 
 **差别**
 $socket_0 = socket_accept()
-$spcket_1 = socket_create()
+$socket_1 = socket_create()
 ！！！！！！
-$accpet == socket_accept($socket);accept是什么含义，收到的是什么信息，出错会怎么样，
-这里返回到额套接字和外层的差别是什么
+$accept == socket_accept($socket);accept是什么含义，收到的是什么信息，出错会怎么样，
+这里返回的里层套接字和外层的差别是什么
+socket_create() = $socket : 这是server段的套接字，监听 11197 端口的消息
+socket_accept() = $accept : 这是server端与某个client端的一次连接
+
+
 
 
 为什么用浏览器访问和命名窗口看不一样

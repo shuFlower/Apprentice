@@ -4,10 +4,6 @@
  * User: flowerZhou
  * Date: 2015/8/21
  * Time: 16:43
-<<<<<<< HEAD
- */
-
-=======
  *
  * UDP连接-client
  */
@@ -34,4 +30,3 @@ try {
 } catch (Exception $exception) {
     echo $exception->getMessage();
 }
->>>>>>> ca57deccdf46dfb0e774ace607045a62eff75cb2
