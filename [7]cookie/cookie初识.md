@@ -77,7 +77,76 @@ TIPS：浏览器请求的时候，只提交key-value的值，其他 max-age,domi
 
 ------------------------------------------------------------------------------------------------------------------
 
-**与session的区别**
+####**session运转的机制**####
+**1.session是什么**
+
+客户端浏览器访问服务器的时候，服务端将客户端的信息以某种形式记录在服务端：
+***session文件***
+   
+
+     1.session存储key-value格式：key-value
+     2.session一般在服务器的内存中，过多会影响服务器的性能
+     （1.session过期，清除文件 2.session文件保持精简）
+     3.生命周期：no-active = xxx s，过期
+
+客户端再次访问，携带ssid，服务端根据ssid查询客户端的状态信息
+
+**2.一个session的完整过程**
+
+每个客户端是一个session对象，客户端首次请求的时候创建session的
+
+-------------------------------------------------------------------------------------------------------------------
+整体过程
+1.client请求server
+2.1 没有对应的session文件，创建session（一般来说ssid与session文件的文件名一致，这里根据client的ssid查找文件，没有找到，就创建session文件）  
+2.2 有session文件，识别对应的ssid，查找到对应的客户资料
+3.返回ssid给客户端，set-cookie：客户端将id作为cookie存在客户端（session需要使用cookie作为识别标志）
+TIPS：这种cookie一般为：max-Age=-1，即在浏览器内存中，关闭浏览器就失效（也是因为这个，所以一个浏览器会话内的cookie是共享的）
+
+**demo**
+我的CSDN--已登录的状态-cookie信息
+
+    uuid_tt_dd=8346155364359030531_20150704; 
+    CloudGuest=BArwWlnnXBqDq47tF8rvqKAhI9n+r757QYYaGwa/xioU/+n/fLnu3h1RdpKupvoothh1imz1loXFX+yV2Ey3F5mzmVFv9nvH01HA8PJIwOPHPpLjlzSRJYo/bXWBgNpfYdlRY637J3+9fB/eTHcf+Xiv1FOT3ooy2H4q0LGzZP/4/eM9FfflMPB5CFHY8dLx; 
+    __gads=ID=4de5d85fc97dcb78:T=1436503944:S=ALNI_MasMEOqmN5JU1W6oF2Fyb9pnANelA; 
+    __qca=P0-947337229-1436593642590; 
+    _JQCMT_ifcookie=1; 
+    _JQCMT_browser=75a55f081bfd1f6bf5565f7f101137f7; 
+    __utma=17226283.2045382789.1437530433.1439796203.1440400465.9; 
+    __utmz=17226283.1440400465.9.7.utmcsr=write.blog.csdn.net|utmccn=(referral)|utmcmd=referral|utmcct=/postedit; 
+    lzstat_uv=24408865021538771619|2675686; 
+    UserName=KKL_renwu;        //我的用户名
+    UserInfo=Xc5ZfxoRoeSzhu5htYAJXL4I9XWejWYFevBpCN5%2FjhUx7rNJBHecPTS2oaCpkbRWJNuCgNz5ZHhx9kw1EGllm2dgG%2BDCpWrGAIaHzoOLuKkyDw0SkHH8yzCzeOxCnZSq; UserNick=%E7%9A%AE%E7%9A%AEshu; 
+    AU=B36; 
+    UD=%E8%8F%9C%E9%B8%9F%E7%BA%A7PHP%E7%A8%8B%E5%BA%8F%E5%AA%9B%E4%B8%80%E5%90%8D%7E%7E; 
+    UN=KKL_renwu; 
+    UE="1510276107@qq.com";   //user-email 邮箱
+    access-token=a51d9bdc-a242-462f-ad25-d8deb6d63a12; 
+    FullCookie=1; 
+    __message_district_code=000000; 
+    _ga=GA1.2.2045382789.1437530433; 
+    _gat=1; 
+    dc_tos=nu1nyc; 
+    dc_session_id=1441188228687;    //****服务器给我的ssid****
+    __message_sys_msg_id=0; 
+    __message_gu_msg_id=0; 
+    __message_cnel_msg_id=0; 
+    __message_in_school=0
+
+
+**以下是一个过程：**
+1.我早上10点登录了，本地cookie存储了ssid，如上我的ssid=1441188228687
+2.下午3点，我再次访问服务器，浏览器根据domain域名，将:.csdn.net的cookie信息，作为http的request信息，发送给服务器，cookie内容如上
+3.服务器根据传过来的cookie，获取ssid，识别出了我
+
+
+-------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------
+
+####**cookie与session的区别**####
+session 是在服务端存放一份客户的信息，用于将客户端传过来的信息进行查询、校验，识别出有用户
+
 1.数据存放：
 
     cookie  存放在客户的浏览器上（client端）
@@ -97,9 +166,15 @@ session会在一定时间内保存在服务器上。当访问增多，会比较�
 5.一般的做法：
    将登陆信息等重要信息存放为SESSION
    其他信息如果需要保留，可以放在COOKIE中
+   
+6.含义理解
+	cookie携带的是通行证
+	session存放的是客户档案
+	
+7.seesion的实现需要依赖于cookie（禁用cookie，使用URL地址重写）
 
 ------------------------------------------------------------------------------------------------------------------
-**Others**
+**Others-cookie**
 1.编码
 cookie中的中文字符会进行编码转码
 cookie支持：unicode,ascii,二进制编码
@@ -131,15 +206,16 @@ Js可以操作cookie，但是A网站的js不能操作B网站的cookie（W3C标�
 
 ------------------------------------------------------------------------------------------------------------------
 **Question**
-如果想要两个域名完全不同的网站共有Cookie，可以生成两个Cookie，domain属性分别为两个域名，输出到客户端?????	
+1.如果想要两个域名完全不同的网站共有Cookie，可以生成两个Cookie，domain属性分别为两个域名，输出到客户端?????	
 
-cookie路径
+2.cookie路径
 
-secure属性并不能对Cookie内容加密，因而不能保证绝对的安全性。如果需要高安全性，需要在程序中对Cookie内容加密、解密，以防泄密
+3.secure属性并不能对Cookie内容加密，因而不能保证绝对的安全性。如果需要高安全性，需要在程序中对Cookie内容加密、解密，以防泄密
 
+4.session比cookie的使用更方便：
+session在服务端，不用每次从client端传识别码过来
+session直接在服务器端获取session全局数组？？？
 
-
-
-
+------------------------------------------------------------------------------------------------------------------
 参考链接：http://blog.csdn.net/yangdelong/article/details/4792763
 
