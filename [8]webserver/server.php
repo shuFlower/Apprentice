@@ -43,8 +43,6 @@ try
         //连接成功，接收
         $accpet_msg = socket_read($accpet, 1024);
 
-
-
         //-------------------------处理http协议------------------
         //分离：请求行-请求体
         $msg_len = strlen($accpet_msg);
@@ -62,15 +60,12 @@ try
             $response = returnError($code = 400, 'Bad Request : server cannot resolute the request correctly.');
             socket_write($accpet, $response);
             socket_close($accpet);
-            exit;
         }
 
         //处理请求，返回数据：response
         $response = getResponse($http_line, $http_header, $http_data);
 
 //        $session= '__ci_last_regenerate|i:1441529979;adminid|s:1:"1";';
-
-
         //-----------处理http协议--------------
 
 

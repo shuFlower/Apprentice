@@ -49,8 +49,6 @@ MESSAGE;
     //发送HTTP报文
     socket_write($socket, $http_msg);
     $get_msg = socket_read($socket, 1024);
-//    print_r($get_msg);exit;
-
 
     //接收返回的网页信息
     $http_page =  httpPageDeal($socket);
@@ -65,7 +63,7 @@ MESSAGE;
 }
 
 /**
- * 处理服务端返回的网页信息：分离，显示
+ * 处理服务端返回的网页信息
  * @param resource $socket socket
  * @return string
  */
